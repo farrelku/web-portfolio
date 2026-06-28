@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio - Farrel Athallah</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        /* ===== GLOW ANIMATIONS ===== */
+        @keyframes glow {
+            0%,
+            100% {
+                text-shadow: 0 0 20px rgba(99, 102, 241, 0.3), 0 0 60px rgba(99, 102, 241, 0.1);
+            }
+            50% {
+                text-shadow: 0 0 40px rgba(99, 102, 241, 0.6), 0 0 80px rgba(99, 102, 241, 0.3);
+            }
+        }
+
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(3deg);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ===== ANIMATION CLASSES ===== */
+        .animate-glow {
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .animate-slide-up {
+            opacity: 0;
+            animation: slideUp 0.8s ease forwards;
+        }
+
+        .animate-slide-left {
+            opacity: 0;
+            animation: slideLeft 0.8s ease forwards;
+        }
+
+        /* Delay classes */
+        .delay-100 {
+            animation-delay: 100ms;
+        }
+        .delay-200 {
+            animation-delay: 200ms;
+        }
+        .delay-300 {
+            animation-delay: 300ms;
+        }
+        .delay-400 {
+            animation-delay: 400ms;
+        }
+        .delay-500 {
+            animation-delay: 500ms;
+        }
+
+        /* ===== GLASSMORPHISM ===== */
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .glass-dark {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* ===== CURSOR GLOW ===== */
+        .cursor-glow {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.08), transparent 70%);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            transition: all 0.1s ease;
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f0f1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #6366f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #818cf8;
+        }
+
+        /* ===== SKILL CARD HOVER ===== */
+        .skill-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .skill-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
+        }
+
+        /* ===== PROJECT CARD ===== */
+        .project-card {
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .project-card:hover {
+            transform: translateY(-12px) scale(1.01);
+            box-shadow: 0 30px 80px rgba(99, 102, 241, 0.15);
+        }
+
+        .project-card .overlay {
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .project-card:hover .overlay {
+            opacity: 1;
+        }
+
+        /* ===== NAV LINK ACTIVE ===== */
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* ===== RESPONSIVE FIXES ===== */
+        @media (max-width: 768px) {
+            .cursor-glow {
+                display: none;
+            }
+            
+            #home {
+                min-height: 100vh;
+                padding-top: 80px;
+            }
+            
+            .glass {
+                backdrop-filter: blur(5px);
+            }
+            
+            .floating-badge {
+                display: none;
+            }
+            
+            .avatar-container {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .avatar-container {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .section-padding {
+                padding: 60px 0;
+            }
+            
+            .glass {
+                padding: 1rem;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .avatar-container {
+                width: 220px;
+                height: 220px;
+            }
+            
+            .hero-title {
+                font-size: 3.5rem;
+            }
+        }
+
+        /* ===== UTILITY ===== */
+        .section-padding {
+            padding: 80px 0;
+        }
+
+        @media (max-width: 768px) {
+            .section-padding {
+                padding: 60px 0;
+            }
+        }
+
+        #mobile-menu {
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 640px) {
+            input, textarea {
+                font-size: 16px !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#0a0a1a] text-white overflow-x-hidden">
+
+    <!-- ===== CURSOR GLOW EFFECT ===== -->
+    <div id="cursorGlow" class="cursor-glow"></div>
+
+    <!-- ==================== NAVBAR ==================== -->
+    <nav class="fixed w-full z-50 top-0 glass-dark border-b border-white/5">
+        <div class="container mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
+            <a href="#" class="text-xl sm:text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 animate-glow">
+                farrel<span class="text-white">.</span>
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
+                <a href="#home" class="nav-link text-gray-300 hover:text-white text-sm font-medium">Home</a>
+                <a href="#about" class="nav-link text-gray-300 hover:text-white text-sm font-medium">About</a>
+                <a href="#skills" class="nav-link text-gray-300 hover:text-white text-sm font-medium">Skills</a>
+                <a href="#projects" class="nav-link text-gray-300 hover:text-white text-sm font-medium">Projects</a>
+                <a href="#contact" class="nav-link text-gray-300 hover:text-white text-sm font-medium">Contact</a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="menu-toggle" class="md:hidden text-gray-300 hover:text-white text-2xl focus:outline-none transition p-2">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass-dark border-t border-white/5 py-4 px-6 space-y-3">
+            <a href="#home" class="block text-gray-300 hover:text-white transition text-base font-medium py-2">Home</a>
+            <a href="#about" class="block text-gray-300 hover:text-white transition text-base font-medium py-2">About</a>
+            <a href="#skills" class="block text-gray-300 hover:text-white transition text-base font-medium py-2">Skills</a>
+            <a href="#projects" class="block text-gray-300 hover:text-white transition text-base font-medium py-2">Projects</a>
+            <a href="#contact" class="block text-gray-300 hover:text-white transition text-base font-medium py-2">Contact</a>
+        </div>
+    </nav>
+
+    <!-- ==================== HERO SECTION ==================== -->
+    <section id="home" class="min-h-screen flex items-center relative overflow-hidden pt-16 sm:pt-20">
+        <!-- Animated Background -->
+        <div class="absolute inset-0 opacity-20 sm:opacity-30">
+            <div class="absolute top-1/4 left-1/4 w-48 sm:w-64 md:w-96 h-48 sm:h-64 md:h-96 bg-indigo-600 rounded-full blur-3xl animate-float"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-48 sm:w-64 md:w-96 h-48 sm:h-64 md:h-96 bg-purple-600 rounded-full blur-3xl animate-float" style="animation-delay: 2s;"></div>
+            <div class="absolute top-1/2 left-1/2 w-48 sm:w-64 md:w-96 h-48 sm:h-64 md:h-96 bg-pink-600 rounded-full blur-3xl animate-float" style="animation-delay: 4s;"></div>
+        </div>
+
+        <!-- Grid Pattern -->
+        <div class="absolute inset-0 opacity-5 hidden sm:block" style="background-image: linear-gradient(rgba(99,102,241,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,0.1) 1px, transparent 1px); background-size: 50px 50px;"></div>
+
+        <div class="container mx-auto px-4 sm:px-6 relative z-10">
+            <div class="flex flex-col-reverse lg:flex-row items-center gap-8 md:gap-12">
+                <!-- Left Content -->
+                <div class="lg:w-1/2 space-y-4 sm:space-y-6 text-center lg:text-left lg:pl-8 xl:pl-16 2xl:pl-24">
+                    <!-- Available Badge -->
+                    <div class="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/20 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-indigo-300 animate-slide-up mx-auto lg:mx-0">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                        </span>
+                        Available for freelance
+                    </div>
+
+                    <!-- Heading -->
+                    <h1 class="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold leading-tight animate-slide-up delay-100">
+                        <span class="text-white">Hi, I'm</span><br />
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 animate-glow">
+                            Farrel Athallah
+                        </span>
+                    </h1>
+
+                    <!-- Deskripsi -->
+                    <p class="hero-subtitle text-gray-400 text-sm sm:text-base md:text-lg max-w-lg animate-slide-up delay-200 leading-relaxed mx-auto lg:mx-0">
+                        Crafting <span class="text-indigo-400 font-semibold">digital experiences</span> with modern
+                        technologies. Building beautiful, fast, and responsive web applications.
+                    </p>
+
+                    <!-- Tombol -->
+                    <div class="flex flex-wrap gap-3 sm:gap-4 animate-slide-up delay-300 justify-center lg:justify-start">
+                        <a href="https://www.behance.net/farrelathallah"
+                        class="group relative inline-flex items-center gap-2 px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/50 transition-all duration-300 hover:scale-105 text-sm sm:text-base">
+                        <span>View Projects</span>
+                        <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        <span class="absolute inset-0 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 blur-xl opacity-0 group-hover:opacity-50 transition-opacity"></span>
+                    </a>
+                    <a href="https://wa.me/6282145023360"
+                    class="px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-xl border border-white/10 text-white font-medium hover:bg-white/5 transition-all duration-300 hover:scale-105 glass text-sm sm:text-base">
+                    <i class="fas fa-paper-plane mr-2"></i> Contact Me
+                </a>
+            </div>
+
+            <!-- Social Icons -->
+            <div class="flex gap-4 sm:gap-5 text-lg sm:text-xl text-gray-400 animate-slide-up delay-400 justify-center lg:justify-start">
+                <a href="https://github.com/farrelku" class="hover:text-indigo-400 transition-all hover:scale-110 hover:-translate-y-1 duration-300"><i class="fab fa-github"></i></a>
+                <a href="https://www.linkedin.com/in/farrelathallah/" class="hover:text-indigo-400 transition-all hover:scale-110 hover:-translate-y-1 duration-300"><i class="fab fa-linkedin"></i></a>
+                <a href="https://x.com/Farrelathalah07" class="hover:text-indigo-400 transition-all hover:scale-110 hover:-translate-y-1 duration-300"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.instagram.com/farrelathllhh/" class="hover:text-indigo-400 transition-all hover:scale-110 hover:-translate-y-1 duration-300"><i class="fab fa-instagram"></i></a>
+
+            </div>
+        </div>
+
+        <!-- Right Image / Avatar -->
+        <div class="lg:w-1/2 flex justify-center animate-float">
+            <div class="relative">
+                <!-- Ring Decoration -->
+                <div class="absolute -inset-2 sm:-inset-4 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-20 blur-2xl animate-pulse"></div>
+                <div class="absolute -inset-4 sm:-inset-8 rounded-full border border-indigo-500/20 hidden sm:block" style="animation: spin 20s linear infinite;"></div>
+                <div class="absolute -inset-6 sm:-inset-12 rounded-full border border-purple-500/20 hidden sm:block" style="animation: spin 25s linear infinite reverse;"></div>
+
+                <!-- Avatar -->
+               <div class="avatar-container relative w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 xl:w-[400px] xl:h-[400px] rounded-full overflow-hidden border-4 border-indigo-500/30 shadow-2xl shadow-indigo-500/20">
+    <img src="asset/profile.png" alt="John Doe" class="w-full h-full object-cover" />
+</div>
+
+                <!-- Floating Badges -->
+                <div class="floating-badge absolute -top-2 -right-2 sm:-top-4 sm:-right-4 bg-indigo-500/20 backdrop-blur-sm border border-indigo-500/30 rounded-xl px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm font-medium text-indigo-300 animate-float" style="animation-delay: 1s;">
+                    <i class="fas fa-code mr-1 sm:mr-2"></i> <span class="hidden xs:inline">3+</span> Years
+                </div>
+                <div class="floating-badge absolute -bottom-1 -left-1 sm:-bottom-2 sm:-left-6 bg-purple-500/20 backdrop-blur-sm border border-purple-500/30 rounded-xl px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm font-medium text-purple-300 animate-float" style="animation-delay: 2s;">
+                    <i class="fas fa-rocket mr-1 sm:mr-2"></i> <span class="hidden xs:inline">20+</span> Projects
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+<!-- ==================== ABOUT SECTION ==================== -->
+<section id="about" class="section-padding relative">
+    <div class="absolute inset-0 bg-gradient-to-b from-[#0a0a1a] via-indigo-950/10 to-[#0a0a1a]"></div>
+
+    <div class="container mx-auto px-4 sm:px-6 relative z-10">
+        <div class="text-center mb-8 sm:mb-12 md:mb-16">
+            <span class="text-indigo-400 text-xs sm:text-sm font-semibold uppercase tracking-wider">About Me</span>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mt-2">
+                Know Me <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Better</span>
+            </h2>
+            <div class="w-16 sm:w-20 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto mt-3 sm:mt-4 rounded-full"></div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8 md:gap-12 lg:gap-16 items-center">
+            <div class="lg:w-1/2 space-y-4 sm:space-y-6 animate-slide-left">
+                <h3 class="text-xl sm:text-2xl font-bold text-white">Who Am I?</h3>
+                <p class="text-gray-400 text-sm sm:text-base leading-relaxed">
+                    I'm a passionate <span class="text-indigo-400 font-semibold">Full Stack Developer and IoT Engineer</span> with a
+                    deep love for creating beautiful digital experiences. With over 3 years of experience in the
+                    industry, I've worked on a wide range of projects from startups to enterprise applications.
+                </p>
+                <p class="text-gray-400 text-sm sm:text-base leading-relaxed">
+                    My expertise lies in <span class="text-indigo-400 font-semibold">Laravel, Python, and Figma</span>,
+                    but I'm always exploring new technologies to expand my toolkit.
+                </p>
+
+                <div class="grid grid-cols-2 gap-3 sm:gap-4 pt-2 sm:pt-4">
+                    <div class="glass rounded-xl p-3 sm:p-4 text-center">
+                        <div class="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">3+</div>
+                        <div class="text-xs sm:text-sm text-gray-400">Years Experience</div>
+                    </div>
+                    <div class="glass rounded-xl p-3 sm:p-4 text-center">
+                        <div class="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">20+</div>
+                        <div class="text-xs sm:text-sm text-gray-400">Projects Done</div>
+                    </div>
+                    <div class="glass rounded-xl p-3 sm:p-4 text-center">
+                        <div class="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">15+</div>
+                        <div class="text-xs sm:text-sm text-gray-400">Happy Clients</div>
+                    </div>
+                    <div class="glass rounded-xl p-3 sm:p-4 text-center">
+                        <div class="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">100%</div>
+                        <div class="text-xs sm:text-sm text-gray-400">Commitment</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:w-1/2 animate-slide-up delay-200 w-full">
+                <div class="glass rounded-2xl p-5 sm:p-6 md:p-8 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-48 sm:w-64 h-48 sm:h-64 bg-indigo-500/10 rounded-full blur-3xl"></div>
+                    <div class="absolute bottom-0 left-0 w-48 sm:w-64 h-48 sm:h-64 bg-purple-500/10 rounded-full blur-3xl"></div>
+
+                    <div class="relative z-10">
+                        <h4 class="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">
+                            <i class="fas fa-quote-left text-indigo-400 mr-2"></i> My Mission
+                        </h4>
+                        <p class="text-gray-300 italic text-base sm:text-lg leading-relaxed">
+                            "To build innovative digital solutions that solve real problems
+                            and make a positive impact on people's lives through technology."
+                        </p>
+
+                        <div class="mt-4 sm:mt-6 space-y-2 sm:space-y-3">
+                            <div class="flex items-center gap-2 sm:gap-3 text-gray-300 text-sm sm:text-base">
+                                <i class="fas fa-check-circle text-indigo-400"></i>
+                                <span>Clean & Maintainable Code</span>
+                            </div>
+                            <div class="flex items-center gap-2 sm:gap-3 text-gray-300 text-sm sm:text-base">
+                                <i class="fas fa-check-circle text-indigo-400"></i>
+                                <span>Pixel Perfect Design</span>
+                            </div>
+                            <div class="flex items-center gap-2 sm:gap-3 text-gray-300 text-sm sm:text-base">
+                                <i class="fas fa-check-circle text-indigo-400"></i>
+                                <span>Performance Optimized</span>
+                            </div>
+                            <div class="flex items-center gap-2 sm:gap-3 text-gray-300 text-sm sm:text-base">
+                                <i class="fas fa-check-circle text-indigo-400"></i>
+                                <span>Mobile First Approach</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== SKILLS SECTION ==================== -->
+<section id="skills" class="section-padding relative">
+    <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a1a] via-indigo-950/10 to-[#0a0a1a]"></div>
+
+    <div class="container mx-auto px-4 sm:px-6 relative z-10">
+        <div class="text-center mb-8 sm:mb-12 md:mb-16">
+            <span class="text-indigo-400 text-xs sm:text-sm font-semibold uppercase tracking-wider">My Skills</span>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mt-2">
+                Technologies I <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Master</span>
+            </h2>
+            <div class="w-16 sm:w-20 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto mt-3 sm:mt-4 rounded-full"></div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+            <!-- Skill Cards -->
+            <div class="skill-card glass rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 text-center group cursor-pointer">
+                <div class="text-3xl sm:text-4xl md:text-5xl mb-2 sm:mb-3 flex justify-center group-hover:scale-110 transition-transform">
+                    <img src="asset/1.png" alt="Figma" class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 object-contain" />
+                </div>
+                <h4 class="font-bold text-white text-sm sm:text-base">Figma</h4>
+                <p class="text-xs sm:text-sm text-gray-400">UI/UX Tools</p>
+                <div class="mt-2 sm:mt-3 h-1 bg-gray-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full" style="width: 85%"></div>
+                </div>
+            </div>
+
+            <div class="skill-card glass rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 text-center group cursor-pointer">
+                <div class="text-3xl sm:text-4xl md:text-5xl mb-2 sm:mb-3 flex justify-center group-hover:scale-110 transition-transform">
+                    <img src="asset/2.png" alt="CorelDRAW" class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 object-contain" />
+                </div>
+                <h4 class="font-bold text-white text-sm sm:text-base">CorelDRAW</h4>
+                <p class="text-xs sm:text-sm text-gray-400">Design Tools</p>
+                <div class="mt-2 sm:mt-3 h-1 bg-gray-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full" style="width: 75%"></div>
+                </div>
+            </div>
+
+            <div class="skill-card glass rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 text-center group cursor-pointer">
+                <div class="text-3xl sm:text-4xl md:text-5xl mb-2 sm:mb-3 flex justify-center group-hover:scale-110 transition-transform">
+                    <img src="asset/3.png" alt="Tailwind" class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 object-contain" />
+                </div>
+                <h4 class="font-bold text-white text-sm sm:text-base">Tailwind</h4>
+                <p class="text-xs sm:text-sm text-gray-400">Frontend Framework</p>
+                <div class="mt-2 sm:mt-3 h-1 bg-gray-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full" style="width: 88%"></div>
+                </div>
+            </div>
+
+            <div class="skill-card glass rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 text-center group cursor-pointer">
+                <div class="text-3xl sm:text-4xl md:text-5xl mb-2 sm:mb-3 flex justify-center group-hover:scale-110 transition-transform">
+                    <img src="asset/4.png" alt="Laravel" class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 object-contain" />
+                </div>
+                <h4 class="font-bold text-white text-sm sm:text-base">Laravel</h4>
+                <p class="text-xs sm:text-sm text-gray-400">Backend Framework</p>
+                <div class="mt-2 sm:mt-3 h-1 bg-gray-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full" style="width: 80%"></div>
+                </div>
+            </div>
+
+            <div class="skill-card glass rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 text-center group cursor-pointer">
+                <div class="mb-2 sm:mb-3 flex justify-center group-hover:scale-110 transition-transform">
+                    <img src="asset/5.png" alt="MySQL" class="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 object-contain" />
+                </div>
+                <h4 class="font-bold text-white text-sm sm:text-base">MySQL</h4>
+                <p class="text-xs sm:text-sm text-gray-400">Database</p>
+                <div class="mt-2 sm:mt-3 h-1 bg-gray-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full" style="width: 82%"></div>
+                </div>
+            </div>
+
+            <div class="skill-card glass rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 text-center group cursor-pointer">
+                <div class="text-3xl sm:text-4xl md:text-5xl mb-2 sm:mb-3 flex justify-center group-hover:scale-110 transition-transform">
+                    <img src="asset/6.png" alt="Python" class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 object-contain" />
+                </div>
+                <br>
+                <h4 class="font-bold text-white text-sm sm:text-base">Python</h4>
+                <p class="text-xs sm:text-sm text-gray-400">Backend Framework</p>
+                <div class="mt-2 sm:mt-3 h-1 bg-gray-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full" style="width: 70%"></div>
+                </div>
+            </div>
+
+            <div class="skill-card glass rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 text-center group cursor-pointer">
+                <div class="text-3xl sm:text-4xl md:text-5xl mb-2 sm:mb-3 flex justify-center group-hover:scale-110 transition-transform">
+                    <img src="asset/8.png" alt="Arduino" class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 object-contain" />
+                </div>
+                <br>
+                <h4 class="font-bold text-white text-sm sm:text-base">Arduino Uno</h4>
+                <p class="text-xs sm:text-sm text-gray-400">IoT Tools</p>
+                <div class="mt-2 sm:mt-3 h-1 bg-gray-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full" style="width: 65%"></div>
+                </div>
+            </div>
+
+            <div class="skill-card glass rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 text-center group cursor-pointer">
+                <div class="text-3xl sm:text-4xl md:text-5xl mb-2 sm:mb-3 flex justify-center group-hover:scale-110 transition-transform">
+                    <img src="asset/7.png" alt="Elementor" class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 object-contain" />
+                </div>
+                <br>
+                <h4 class="font-bold text-white text-sm sm:text-base">Elementor</h4>
+                <p class="text-xs sm:text-sm text-gray-400">Page Builder</p>
+                <div class="mt-2 sm:mt-3 h-1 bg-gray-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full" style="width: 92%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== PROJECTS SECTION ==================== -->
+<section id="projects" class="section-padding relative">
+    <div class="container mx-auto px-4 sm:px-6 relative z-10">
+        <div class="text-center mb-8 sm:mb-12 md:mb-16">
+            <span class="text-indigo-400 text-xs sm:text-sm font-semibold uppercase tracking-wider">Portfolio</span>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mt-2">
+                My Latest <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Projects</span>
+            </h2>
+            <div class="w-16 sm:w-20 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto mt-3 sm:mt-4 rounded-full"></div>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+            <!-- Project 1 -->
+            <div class="project-card glass rounded-xl sm:rounded-2xl overflow-hidden group">
+                <div class="relative h-40 sm:h-48 md:h-56 overflow-hidden">
+                    <!-- Thumbnail Gambar -->
+                    <img 
+                        src="asset/t1.jpg" 
+                        alt="Pola.AI Project Thumbnail" 
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                    />
+                    <!-- Fallback jika gambar tidak ditemukan -->
+                    <div class="w-full h-full bg-gradient-to-br from-indigo-600/30 to-purple-600/30 flex items-center justify-center text-4xl sm:text-5xl md:text-6xl" style="display:none;">
+                        <i class="fas fa-brain text-indigo-400"></i>
+                    </div>
+                    <!-- Overlay -->
+                    <div class="overlay absolute inset-0 bg-gradient-to-t from-[#0a0a1a] via-transparent to-transparent flex items-end justify-center p-4 sm:p-6">
+                        <a href="#" class="px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl bg-indigo-500 text-white text-xs sm:text-sm font-medium hover:bg-indigo-600 transition-all hover:scale-105">
+                            <i class="fas fa-eye mr-1 sm:mr-2"></i> View Project
+                        </a>
+                    </div>
+                </div>
+                <div class="p-4 sm:p-5 md:p-6">
+                    <h4 class="text-lg sm:text-xl font-bold text-white">Pola.AI - Deteksi Motif Batik</h4>
+                    <p class="text-gray-400 text-xs sm:text-sm mt-1 sm:mt-2">
+                        Pola Ai Menggunakan Model ResNet50
+                    </p>
+                    <div class="flex flex-wrap gap-1.5 sm:gap-2 mt-3 sm:mt-4">
+                        <span class="text-[10px] sm:text-xs px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/20">Python</span>
+                        <span class="text-[10px] sm:text-xs px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/20">CNN</span>
+                        <span class="text-[10px] sm:text-xs px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/20">ResNet50</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 2 -->
+            <div class="project-card glass rounded-xl sm:rounded-2xl overflow-hidden group">
+                <div class="relative h-40 sm:h-48 md:h-56 overflow-hidden">
+                    <!-- Thumbnail Gambar -->
+                    <img 
+                        src="asset/t2.jpg" 
+                        alt="Fowlers Vacola Project Thumbnail" 
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                    />
+                    <!-- Fallback jika gambar tidak ditemukan -->
+                    <div class="w-full h-full bg-gradient-to-br from-indigo-600/30 to-purple-600/30 flex items-center justify-center text-4xl sm:text-5xl md:text-6xl" style="display:none;">
+                        <i class="fas fa-paint-brush text-indigo-400"></i>
+                    </div>
+                    <!-- Overlay -->
+                    <div class="overlay absolute inset-0 bg-gradient-to-t from-[#0a0a1a] via-transparent to-transparent flex items-end justify-center p-4 sm:p-6">
+                        <a href="#" class="px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl bg-indigo-500 text-white text-xs sm:text-sm font-medium hover:bg-indigo-600 transition-all hover:scale-105">
+                            <i class="fas fa-eye mr-1 sm:mr-2"></i> View Project
+                        </a>
+                    </div>
+                </div>
+                <div class="p-4 sm:p-5 md:p-6">
+                    <h4 class="text-lg sm:text-xl font-bold text-white">Fowlers Vacola Web Design</h4>
+                    <p class="text-gray-400 text-xs sm:text-sm mt-1 sm:mt-2">
+                        Fowlers Vacola Brand Jar Asal Sydney
+                    </p>
+                    <div class="flex flex-wrap gap-1.5 sm:gap-2 mt-3 sm:mt-4">
+                        <span class="text-[10px] sm:text-xs px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/20">Figma</span>
+                        <span class="text-[10px] sm:text-xs px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/20">UI/UX Design</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 3 -->
+            <div class="project-card glass rounded-xl sm:rounded-2xl overflow-hidden group">
+                <div class="relative h-40 sm:h-48 md:h-56 overflow-hidden">
+                    <!-- Thumbnail Gambar -->
+                    <img 
+                        src="asset/t3.jpg" 
+                        alt="Farrel Computer Project Thumbnail" 
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                    />
+                    <!-- Fallback jika gambar tidak ditemukan -->
+                    <div class="w-full h-full bg-gradient-to-br from-indigo-600/30 to-purple-600/30 flex items-center justify-center text-4xl sm:text-5xl md:text-6xl" style="display:none;">
+                        <i class="fas fa-laptop text-indigo-400"></i>
+                    </div>
+                    <!-- Overlay -->
+                    <div class="overlay absolute inset-0 bg-gradient-to-t from-[#0a0a1a] via-transparent to-transparent flex items-end justify-center p-4 sm:p-6">
+                        <a href="#" class="px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl bg-indigo-500 text-white text-xs sm:text-sm font-medium hover:bg-indigo-600 transition-all hover:scale-105">
+                            <i class="fas fa-eye mr-1 sm:mr-2"></i> View Project
+                        </a>
+                    </div>
+                </div>
+                <div class="p-4 sm:p-5 md:p-6">
+                    <h4 class="text-lg sm:text-xl font-bold text-white">Web Farrel Computer</h4>
+                    <p class="text-gray-400 text-xs sm:text-sm mt-1 sm:mt-2">
+                        Web Manajemen Data Penjualan
+                    </p>
+                    <div class="flex flex-wrap gap-1.5 sm:gap-2 mt-3 sm:mt-4">
+                        <span class="text-[10px] sm:text-xs px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/20">Laravel</span>
+                        <span class="text-[10px] sm:text-xs px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/20">Tailwind CSS</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Button View All Projects -->
+        <div class="text-center mt-10 sm:mt-12 md:mt-16">
+            <a href="https://github.com/farrelku" class="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-sm sm:text-base font-semibold hover:from-indigo-600 hover:to-purple-600 transition-all hover:scale-105 shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50">
+                <span>View All Projects</span>
+                <i class="fas fa-arrow-right text-xs sm:text-sm"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== CONTACT SECTION ==================== -->
+<section id="contact" class="section-padding relative">
+    <div class="absolute inset-0 bg-gradient-to-b from-[#0a0a1a] via-indigo-950/10 to-[#0a0a1a]"></div>
+
+    <div class="container mx-auto px-4 sm:px-6 relative z-10">
+        <div class="text-center mb-8 sm:mb-12 md:mb-16">
+            <span class="text-indigo-400 text-xs sm:text-sm font-semibold uppercase tracking-wider">Get In Touch</span>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mt-2">
+                Let's <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Connect</span>
+            </h2>
+            <div class="w-16 sm:w-20 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto mt-3 sm:mt-4 rounded-full"></div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8 md:gap-12 max-w-6xl mx-auto">
+            <!-- Contact Info -->
+            <div class="lg:w-1/2 space-y-4 sm:space-y-6 animate-slide-left">
+                <h3 class="text-xl sm:text-2xl font-bold text-white">Have a Project?</h3>
+                <p class="text-gray-400 text-sm sm:text-base leading-relaxed">
+                    I'm always interested in hearing about new projects and opportunities.
+                    Whether you have a question or just want to say hi, feel free to reach out!
+                </p>
+
+                <div class="space-y-3 sm:space-y-4">
+                    <div class="flex items-center gap-3 sm:gap-4 glass rounded-xl p-3 sm:p-4 group hover:border-indigo-500/30 transition-all hover:-translate-y-1 duration-300">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-envelope text-base sm:text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs sm:text-sm text-gray-400">Email</p>
+                            <p class="text-white font-medium text-sm sm:text-base">farrelathallah06@gmail.com</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 sm:gap-4 glass rounded-xl p-3 sm:p-4 group hover:border-purple-500/30 transition-all hover:-translate-y-1 duration-300">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-phone text-base sm:text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs sm:text-sm text-gray-400">Phone</p>
+                            <p class="text-white font-medium text-sm sm:text-base">+6282145023360</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 sm:gap-4 glass rounded-xl p-3 sm:p-4 group hover:border-pink-500/30 transition-all hover:-translate-y-1 duration-300">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-pink-500/20 flex items-center justify-center text-pink-400 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-map-marker-alt text-base sm:text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs sm:text-sm text-gray-400">Location</p>
+                            <p class="text-white font-medium text-sm sm:text-base">Surabaya, Indonesia</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex gap-3 sm:gap-4 pt-2 sm:pt-4">
+                    <a href="https://github.com/farrelku" class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/5 flex items-center justify-center text-gray-400 hover:bg-indigo-500/20 hover:text-indigo-400 transition-all hover:scale-110 hover:-translate-y-1 duration-300">
+                        <i class="fab fa-github text-base sm:text-xl"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/farrelathallah/" class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/5 flex items-center justify-center text-gray-400 hover:bg-indigo-500/20 hover:text-indigo-400 transition-all hover:scale-110 hover:-translate-y-1 duration-300">
+                        <i class="fab fa-linkedin text-base sm:text-xl"></i>
+                    </a>
+                    <a href="https://x.com/Farrelathalah07" class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/5 flex items-center justify-center text-gray-400 hover:bg-indigo-500/20 hover:text-indigo-400 transition-all hover:scale-110 hover:-translate-y-1 duration-300">
+                        <i class="fab fa-twitter text-base sm:text-xl"></i>
+                    </a>
+                   
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <form class="lg:w-1/2 glass rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8 space-y-4 sm:space-y-5 animate-slide-up delay-200">
+                <div>
+                    <label class="block text-gray-300 text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">Your Name</label>
+                    <input type="text" placeholder="John Doe"
+                    class="w-full bg-white/5 border border-white/10 rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-white placeholder-gray-500 text-sm sm:text-base focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20 transition-all" />
+                </div>
+                <div>
+                    <label class="block text-gray-300 text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">Email Address</label>
+                    <input type="email" placeholder="john@email.com"
+                    class="w-full bg-white/5 border border-white/10 rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-white placeholder-gray-500 text-sm sm:text-base focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20 transition-all" />
+                </div>
+                <div>
+                    <label class="block text-gray-300 text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">Subject</label>
+                    <input type="text" placeholder="Project Discussion"
+                    class="w-full bg-white/5 border border-white/10 rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-white placeholder-gray-500 text-sm sm:text-base focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20 transition-all" />
+                </div>
+                <div>
+                    <label class="block text-gray-300 text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">Message</label>
+                    <textarea rows="4" placeholder="Tell me about your project..."
+                    class="w-full bg-white/5 border border-white/10 rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-white placeholder-gray-500 text-sm sm:text-base focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20 transition-all resize-none"></textarea>
+                </div>
+                <button type="submit"
+                class="w-full group relative inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/50 transition-all hover:scale-105 text-sm sm:text-base">
+                <i class="fas fa-paper-plane"></i>
+                <span>Send Message</span>
+                <span class="absolute inset-0 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 blur-xl opacity-0 group-hover:opacity-50 transition-opacity"></span>
+            </button>
+        </form>
+    </div>
+</div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+
+
+<!-- ==================== JAVASCRIPT ==================== -->
+<script>
+    // ===== CURSOR GLOW =====
+    const cursorGlow = document.getElementById('cursorGlow');
+
+    document.addEventListener('mousemove', (e) => {
+        cursorGlow.style.left = e.clientX + 'px';
+        cursorGlow.style.top = e.clientY + 'px';
+    });
+
+    // ===== MOBILE MENU TOGGLE =====
+    const toggleBtn = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    toggleBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+        const icon = toggleBtn.querySelector('i');
+        icon.classList.toggle('fa-bars');
+        icon.classList.toggle('fa-times');
+    });
+
+    // Close menu when clicking a link
+    document.querySelectorAll('#mobile-menu a').forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            const icon = toggleBtn.querySelector('i');
+            icon.classList.add('fa-bars');
+            icon.classList.remove('fa-times');
+        });
+    });
+
+    // ===== SMOOTH SCROLL =====
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // ===== INTERSECTION OBSERVER FOR ANIMATIONS =====
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+
+    // Observe all elements with animation classes
+    document.querySelectorAll('.animate-slide-up, .animate-slide-left').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(40px)';
+        observer.observe(el);
+    });
+
+    // ===== NAV LINK ACTIVE STATE =====
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - 100;
+            if (window.scrollY >= sectionTop) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${current}`) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
